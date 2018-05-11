@@ -260,27 +260,43 @@ at `matplotlib-winbuild <https://github.com/jbmohler/matplotlib-winbuild>`_.
 There are a few possibilities to build Matplotlib on Windows:
 
 * Wheels via `matplotlib-winbuild <https://github.com/jbmohler/matplotlib-winbuild>`_
-* Wheels by using conda packages
+* Using conda
 * Conda packages
 
-Wheel builds using conda packages
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This is a wheel build, but we use conda packages to get all the requirements.
+Using Conda
+^^^^^^^^^^^ 
+Conda is used to get all the reguirements. 
 The binary requirements (png, FreeType,...) are statically linked and therefore
 not needed during the wheel install.
 
+Create a new conda environment with the required packages. This can be done with
 ::
-
-  # create a new environment with the required packages
-  conda create -n "matplotlib_build" python=3.5 numpy python-dateutil pyparsing pytz tornado cycler tk libpng zlib freetype
-  activate matplotlib_build
+  
+  conda create -n matplotlib_build python=3.6 numpy python-dateutil pyparsing pytz tornado cycler tk libpng zlib freetype
+   
   # if you want a qt backend, you also have to install pyqt (be aware that pyqt doesn't mix well if
   # you have created the environment with conda-forge already activated...)
-  conda install pyqt
+  conda install -n matplotlib_build pyqt
+  
   # this package is only available in the conda-forge channel
-  conda install -c conda-forge msinttypes
+  conda install -n matplotlib_build -c conda-forge msinttypes
 
+or for example cloning an environment with matplotlib and uninstalling matplotlib
+::
+  
+  conda create -n matplotlib_build --clone cloned_name
+
+  #uninstall matplotlib
+  conda uninstall -n matplotlib_build matplotlib
+  
+Active the environment
+::
+
+  #in cmd (powershell doesn't work)
+  activate matplotlib_build  
+  
+and set some variables
+::
   # copy the libs which have "wrong" names
   set LIBRARY_LIB=%CONDA_PREFIX%\Library\lib
   mkdir lib || cmd /c "exit /b 0"
@@ -291,11 +307,34 @@ not needed during the wheel install.
   # CONDA_DEFAULT_ENV is a env variable which is set to the currently active environment path
   set MPLBASEDIRLIST=%CONDA_PREFIX%\Library\;.
 
-  # build the wheel
+Build matplotlib from source using for example
+::
+  
+  # Install standard 
+  python setyp.py install
+  
+  # Install in develop mode 
+  python setyp.py develop
+    
+  # Build a wheel
   python setup.py bdist_wheel
 
-The `build_alllocal.cmd` script in the root folder automates these steps if
-you have already created and activated the conda environment.
+The `build_alllocal.cmd` script in the root folder automates the last two 
+steps if you have already created and activated the conda environment. The 
+script can take one parameter which is the parameter to `setyp.py`. 
+The default is `bdist_wheel`.
+::
+    
+    build_allllocal.py develop # Install in develop mode
+
+
+The wheel that is the result if `bdist_wheel` is used can be found in the 
+``dist`` folder and can be installed with:
+::
+
+    pip install dist/name_of_wheel.whl
+    
+    
 
 Conda packages
 ^^^^^^^^^^^^^^
