@@ -15,7 +15,13 @@ plot generation::
     y = np.sin(x)
     plt.plot(x, y)
 
-The object-oriented API is recommended for more complex plots.
+The object-oriented API is recommended for more complex plots. A few pyplots
+functions are also often used in the object-oriented context though.
+
+Begin with making a figure with `pyplot.figure` or  `pyplot.subplots`,
+display the figures with  `pyplot.show` and closing figures with
+`pyplot.close`. Interactive mode can be set on or off with  `pyplot.ion` and
+`pyplot.ioff`.
 """
 
 import inspect
@@ -73,7 +79,7 @@ from matplotlib.backends import pylab_setup
 
 def _backend_selection():
     """
-    If rcParams['backend_fallback'] is true, check to see if the
+    If :rc:`backend_fallback` is true, check to see if the
     current backend is compatible with the current running event loop,
     and if not switches to a compatible one.
     """
@@ -315,17 +321,19 @@ def rcdefaults():
 
 def gci():
     """
-    Get the current colorable artist.  Specifically, returns the
-    current :class:`~matplotlib.cm.ScalarMappable` instance (image or
-    patch collection), or *None* if no images or patch collections
-    have been defined.  The commands :func:`~matplotlib.pyplot.imshow`
-    and :func:`~matplotlib.pyplot.figimage` create
-    :class:`~matplotlib.image.Image` instances, and the commands
-    :func:`~matplotlib.pyplot.pcolor` and
-    :func:`~matplotlib.pyplot.scatter` create
-    :class:`~matplotlib.collections.Collection` instances.  The
-    current image is an attribute of the current axes, or the nearest
-    earlier axes in the current figure that contains an image.
+    Get the current colorable artist.
+
+    Specifically, returns the current `~matplotlib.cm.ScalarMappable`
+    instance (image or patch collection), or *None* if no images or patch
+    collections have been defined.
+
+    `~.pyplot.imshow` and `~.pyplot.figimage` create
+    `~matplotlib.image.AxesImage` instances, and `~.pyplot.pcolor` and
+    `~.pyplot.scatter` create `~matplotlib.collections.Collection` instances.
+
+    The current image is an attribute of the current `~.axes.Axes`, or
+    the nearest earlier axes in the current `~.figure.Figure` that contains
+    an image.
     """
     return gcf()._gci()
 
@@ -558,15 +566,21 @@ def _auto_draw_if_interactive(fig, val):
 
     Parameters
     ----------
-    fig : Figure
-        A figure object which is assumed to be associated with a canvas
+    fig : `~matplotlib.figure.Figure`
+        A Figure object which is assumed to be associated with a canvas
+
+    val : bool
     """
     if val and matplotlib.is_interactive() and not fig.canvas.is_saving():
         fig.canvas.draw_idle()
 
 
 def gcf():
-    """Get a reference to the current figure."""
+    """
+    Get a reference to the current `~matplotlib.figure.Figure`.
+
+    Creates a figure with `~.pyplot.figure` if no current figure exists.
+    """
     figManager = _pylab_helpers.Gcf.get_active()
     if figManager is not None:
         return figManager.canvas.figure
@@ -575,6 +589,19 @@ def gcf():
 
 
 def fignum_exists(num):
+    """
+    Test if a figure exists.
+
+    Parameters
+    ----------
+    num : int or str
+        Number or name of a figure.
+
+    Returns
+    -------
+    bool
+        True if the figure *num* exists
+    """
     return _pylab_helpers.Gcf.has_fignum(num) or num in get_figlabels()
 
 
@@ -654,7 +681,13 @@ def close(*args):
 
 
 def clf():
-    """Clear the current figure."""
+    """
+    Clear the current figure.
+
+    See Also
+    --------
+    matplotlib.figure.Figure.clf
+    """
     gcf().clf()
 
 
@@ -662,14 +695,14 @@ def draw():
     """Redraw the current figure.
 
     This is used to update a figure that has been altered, but not
-    automatically re-drawn.  If interactive mode is on (:func:`.ion()`), this
+    automatically re-drawn.  If interactive mode is on (`.pyplot.ion()`), this
     should be only rarely needed, but there may be ways to modify the state of
     a figure without marking it as `stale`.  Please report these cases as
     bugs.
 
     A more object-oriented alternative, given any
-    :class:`~matplotlib.figure.Figure` instance, :attr:`fig`, that
-    was created using a :mod:`~matplotlib.pyplot` function, is::
+    `~matplotlib.figure.Figure` instance, :attr:`fig`, that
+    was created using a `~matplotlib.pyplot` function, is::
 
         fig.canvas.draw_idle()
     """
@@ -686,28 +719,11 @@ def savefig(*args, **kwargs):
 
 @docstring.copy_dedent(Figure.ginput)
 def ginput(*args, **kwargs):
-    """
-    Blocking call to interact with the figure.
-
-    This will wait for *n* clicks from the user and return a list of the
-    coordinates of each click.
-
-    If *timeout* is negative, does not timeout.
-    """
     return gcf().ginput(*args, **kwargs)
 
 
 @docstring.copy_dedent(Figure.waitforbuttonpress)
 def waitforbuttonpress(*args, **kwargs):
-    """
-    Blocking call to interact with the figure.
-
-    This will wait for *n* key or mouse clicks from the user and
-    return a list containing True's for keyboard clicks and False's
-    for mouse clicks.
-
-    If *timeout* is negative, does not timeout.
-    """
     return gcf().waitforbuttonpress(*args, **kwargs)
 
 
@@ -729,41 +745,8 @@ def figimage(*args, **kwargs):
     return gcf().figimage(*args, **kwargs)
 
 
+@docstring.copy_dedent(Figure.legend)
 def figlegend(*args, **kwargs):
-    """
-    Place a legend in the figure.
-
-    *labels*
-      a sequence of strings
-
-    *handles*
-      a sequence of :class:`~matplotlib.lines.Line2D` or
-      :class:`~matplotlib.patches.Patch` instances
-
-    *loc*
-      can be a string or an integer specifying the legend
-      location
-
-    A :class:`matplotlib.legend.Legend` instance is returned.
-
-    Examples
-    --------
-
-    To make a legend from existing artists on every axes::
-
-      figlegend()
-
-    To make a legend for a list of lines and labels::
-
-      figlegend( (line1, line2, line3),
-                 ('label1', 'label2', 'label3'),
-                 'upper right' )
-
-    .. seealso::
-
-       :func:`~matplotlib.pyplot.legend`
-
-    """
     return gcf().legend(*args, **kwargs)
 
 
@@ -846,9 +829,20 @@ def axes(arg=None, **kwargs):
 
 def delaxes(ax=None):
     """
-    Remove the `Axes` *ax* (defaulting to the current axes) from its figure.
+    Remove an axes.
 
+    Parameters
+    ----------
+    ax : `~matplotlib.axes.Axes` or None
+        Remove the Axes *ax* or the current axes if *ax* =None from its figure.
+
+    Notes
+    -----
     A KeyError is raised if the axes doesn't exist.
+
+    See Also
+    --------
+    matplotlib.figure.Figure.delaxes
     """
     if ax is None:
         ax = gca()
@@ -857,9 +851,14 @@ def delaxes(ax=None):
 
 def sca(ax):
     """
-    Set the current Axes instance to *ax*.
+    Set the current axes.
 
-    The current Figure is updated to the parent of *ax*.
+    The current `~matplotlib.figure.Figure` is updated to the parent of *ax*.
+
+    Parameters
+    ----------
+    ax : `~.axes.Axes`
+        Set the current axes instance to *ax*.
     """
     managers = _pylab_helpers.Gcf.get_all_fig_managers()
     for m in managers:
@@ -872,7 +871,7 @@ def sca(ax):
 
 def gca(**kwargs):
     """
-    Get the current :class:`~matplotlib.axes.Axes` instance on the
+    Get the current `~matplotlib.axes.Axes` instance on the
     current figure matching the given keyword args, or create one.
 
     Examples
@@ -1139,24 +1138,26 @@ def subplot2grid(shape, loc, rowspan=1, colspan=1, fig=None, **kwargs):
     colspan : int
         Number of columns for the axis to span downwards.
 
-    fig : `Figure`, optional
+    fig : `~.figure.Figure`, optional
         Figure to place axis in. Defaults to current figure.
 
     **kwargs
-        Additional keyword arguments are handed to `add_subplot`.
-
+        Additional keyword arguments are handed to
+        `.Figure.add_subplot`.
 
     Notes
     -----
-    The following call ::
+    ::
 
-        subplot2grid(shape, loc, rowspan=1, colspan=1)
+        import matplotlib.pyplot as plt
 
-    is identical to ::
+        #The following call
+        plt.subplot2grid(shape, loc, rowspan=1, colspan=1)
 
-        gridspec=GridSpec(shape[0], shape[1])
+        #is identical to
+        gridspec=plt.GridSpec(shape[0], shape[1])
         subplotspec=gridspec.new_subplotspec(loc, rowspan, colspan)
-        subplot(subplotspec)
+        plt.subplot(subplotspec)
     """
 
     if fig is None:
@@ -1182,15 +1183,22 @@ def subplot2grid(shape, loc, rowspan=1, colspan=1, fig=None, **kwargs):
 
 def twinx(ax=None):
     """
-    Make a second axes that shares the *x*-axis.  The new axes will
-    overlay *ax* (or the current axes if *ax* is *None*).  The ticks
-    for *ax2* will be placed on the right, and the *ax2* instance is
-    returned.
+    Make a second axes that shares the *x*-axis. The ticks for *ax2* will
+    be placed on the right.
 
-    .. seealso::
+    Parameters
+    ----------
+        ax : `~matplotlib.axes.Axes` or None
+            The new axes will overlay *ax* if *ax* is an
+            `~matplotlib.axes.Axes` object and the current axes if *ax* =None.
 
-       :file:`examples/api_examples/two_scales.py`
-          For an example
+    Returns
+    -------
+        ax2 : `~matplotlib.axes.Axes`
+
+    Examples
+    --------
+    examples/api_examples/two_scales.py : For an example
     """
     if ax is None:
         ax = gca()
@@ -1237,7 +1245,15 @@ def subplot_tool(targetfig=None):
     """
     Launch a subplot tool window for a figure.
 
-    A :class:`matplotlib.widgets.SubplotTool` instance is returned.
+    Parameters
+    ----------
+        targetfig : `~matplotlib.figure.Figure` or None
+            The target figure for the subplot tool. Current figure is the
+            target if *targetfig* =None.
+
+    Returns
+    -------
+        `matplotlib.widgets.SubplotTool`
     """
     tbar = rcParams['toolbar'] # turn off the navigation toolbar for the toolfig
     rcParams['toolbar'] = 'None'
@@ -1378,9 +1394,9 @@ def ylim(*args, **kwargs):
     return ret
 
 
-def xticks(ticks=None, labels=None, **kwargs):
+def xticks(ticks=None, labels=None, fontdict=None, minor=False, **kwargs):
     """
-    Get or set the current tick locations and labels of the x-axis.
+    Get or set the tick locations and labels of the current x-axis.
 
     Call signatures::
 
@@ -1390,23 +1406,34 @@ def xticks(ticks=None, labels=None, **kwargs):
 
     Parameters
     ----------
-    ticks : array_like
-        A list of positions at which ticks should be placed. You can pass an
-        empty list to disable xticks.
+    ticks : list
+        List of x-axis tick locations.
 
-    labels : array_like, optional
-        A list of explicit labels to place at the given *locs*.
+    labels : list of str
+        List of string labels.
 
-    **kwargs
-        :class:`.Text` properties can be used to control the appearance of
-        the labels.
+    fontdict : dict, optional
+        A dictionary controlling the appearance of the ticklabels.
+        The default `fontdict` is::
+
+           {'fontsize': :rc:`axes.titlesize`,
+            'fontweight': :rc:`axes.titleweight`,
+            'verticalalignment': 'baseline',
+            'horizontalalignment': loc}
+
+    minor : bool, optional
+        Whether to set the minor ticklabels rather than the major ones.
+
+    Other Parameters
+    -----------------
+    **kwargs : `~.text.Text` properties.
 
     Returns
     -------
-    locs
-        An array of label locations.
-    labels
-        A list of `.Text` objects.
+    locs : array of scalars
+        The label locations.
+    labels : list of `~.text.Text`
+        The `~.text.Text` labels.
 
     Notes
     -----
@@ -1444,11 +1471,12 @@ def xticks(ticks=None, labels=None, **kwargs):
         locs = ax.get_xticks()
         labels = ax.get_xticklabels()
     elif labels is None:
-        locs = ax.set_xticks(ticks)
+        locs = ax.set_xticks(ticks, minor=minor)
         labels = ax.get_xticklabels()
     else:
-        locs = ax.set_xticks(ticks)
-        labels = ax.set_xticklabels(labels, **kwargs)
+        locs = ax.set_xticks(ticks, minor=minor)
+        labels = ax.set_xticklabels(labels, fontdict=fontdict,
+                                    minor=minor, **kwargs)
     for l in labels:
         l.update(kwargs)
 
@@ -1539,28 +1567,51 @@ def rgrids(*args, **kwargs):
     call signatures::
 
       lines, labels = rgrids()
-      lines, labels = rgrids(radii, labels=None, angle=22.5, **kwargs)
+      lines, labels = rgrids(radii, labels=None, angle=22.5, fmt=None, **kwargs)
 
-    When called with no arguments, :func:`rgrid` simply returns the
-    tuple (*lines*, *labels*), where *lines* is an array of radial
-    gridlines (:class:`~matplotlib.lines.Line2D` instances) and
-    *labels* is an array of tick labels
-    (:class:`~matplotlib.text.Text` instances). When called with
-    arguments, the labels will appear at the specified radial
-    distances and angles.
+    When called with no arguments, `rgrids` simply returns the tuple
+    (*lines*, *labels*). When called with arguments, the labels will
+    appear at the specified radial distances and angle.
 
-    *labels*, if not *None*, is a len(*radii*) list of strings of the
-    labels to use at each angle.
+    Parameters
+    ----------
+    radii : tuple with floats
+        The radii for the radial gridlines
 
-    If *labels* is None, the rformatter will be used
+    labels : tuple with strings or None
+        The labels to use at each radial gridline. The
+        `~matplotlib.ticker.ScalarFormatter` will be used if None.
 
-    Examples::
+    angle : float
+        The angular position of the radius labels in degrees.
+
+    fmt : str or None
+        Format string used in `~matplotlib.ticker.FormatStrFormatter`. For
+        example '%f'
+
+    Returns
+    -------
+    lines, labels : an array of `~.lines.Line2D` and an array of `~.text.Text`
+        *lines* are the radial gridlines and *labels* are the tick labels.
+
+    Other Parameters
+    ----------------
+        **kwargs
+             *kwargs* are optional `~.text` properties for the labels
+
+    Examples
+    --------
+    ::
 
       # set the locations of the radial gridlines and labels
       lines, labels = rgrids( (0.25, 0.5, 1.0) )
 
       # set the locations and labels of the radial gridlines and labels
-      lines, labels = rgrids( (0.25, 0.5, 1.0), ('Tom', 'Dick', 'Harry' )
+      lines, labels = rgrids( (0.25, 0.5, 1.0), ('Tom', 'Dick', 'Harry' ))
+
+    See Also
+    --------
+    matplotlib.projections.polar.PolarAxes.set_rgrids
 
     """
     ax = gca()
@@ -1950,7 +2001,8 @@ def _setup_pyplot_info_docstrings():
 
 ## Plotting part 1: manually generated functions and wrappers ##
 
-
+#@docstring.detent_interpd
+@docstring.Appender(matplotlib.colorbar.colorbar_doc)
 def colorbar(mappable=None, cax=None, ax=None, **kw):
     if mappable is None:
         mappable = gci()
@@ -1964,7 +2016,6 @@ def colorbar(mappable=None, cax=None, ax=None, **kw):
 
     ret = gcf().colorbar(mappable, cax = cax, ax=ax, **kw)
     return ret
-colorbar.__doc__ = matplotlib.colorbar.colorbar_doc
 
 
 def clim(vmin=None, vmax=None):
@@ -1995,12 +2046,18 @@ def clim(vmin=None, vmax=None):
 def set_cmap(cmap):
     """
     Set the default colormap.  Applies to the current image if any.
-    See help(colormaps) for more information.
 
-    *cmap* must be a :class:`~matplotlib.colors.Colormap` instance, or
-    the name of a registered colormap.
+    See `~matplotlib.pyplot.colormaps` for more information.
 
-    See :func:`matplotlib.cm.register_cmap` and
+    Parameters
+    ----------
+    cmap : `~matplotlib.colors.Colormap` or str
+        *cmap* can be either a `.Colormap` or the name of a registered
+        colormap
+
+    Also See
+    --------
+    :func:`matplotlib.cm.register_cmap`
     :func:`matplotlib.cm.get_cmap`.
     """
     cmap = cm.get_cmap(cmap)
@@ -2033,21 +2090,26 @@ def matshow(A, fignum=None, **kw):
 
     Tick labels for the xaxis are placed on top.
 
-    With the exception of *fignum*, keyword arguments are passed to
-    :func:`~matplotlib.pyplot.imshow`.  You may set the *origin*
-    kwarg to "lower" if you want the first row in the array to be
-    at the bottom instead of the top.
+    Parameters
+    ----------
+    A : array like
+        The array that is displayed.
 
+    fignum : { None , integer, False }
+        By default, :func:`matshow` creates a new figure window with
+        automatic numbering.  If *fignum* is given as an integer, the
+        created figure will use this figure number.  Because of how
+        :func:`matshow` tries to set the figure aspect ratio to be the
+        one of the array, if you provide the number of an already
+        existing figure, strange things may happen.
 
-    *fignum*: [ None | integer | False ]
-      By default, :func:`matshow` creates a new figure window with
-      automatic numbering.  If *fignum* is given as an integer, the
-      created figure will use this figure number.  Because of how
-      :func:`matshow` tries to set the figure aspect ratio to be the
-      one of the array, if you provide the number of an already
-      existing figure, strange things may happen.
+        If *fignum* is *False* or 0, a new figure window will **NOT** be
+        created.
 
-      If *fignum* is *False* or 0, a new figure window will **NOT** be created.
+    kw : keywords
+        Keywords passed to `~matplotlib.pyplot.imshow`. You may set the
+        *origin* kwarg to "lower" if you want the first row in the array to be
+        at the bottom instead of the top.
     """
     A = np.asanyarray(A)
     if fignum is False or fignum is 0:
@@ -2073,7 +2135,6 @@ def polar(*args, **kwargs):
 
     Multiple *theta*, *r* arguments are supported, with format
     strings, as in :func:`~matplotlib.pyplot.plot`.
-
     """
     # If an axis already exists, check if it has a polar projection
     if gcf().get_axes():

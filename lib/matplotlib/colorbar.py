@@ -130,9 +130,9 @@ colorbar_doc = '''
 
 Add a colorbar to a plot.
 
-Function signatures for the :mod:`~matplotlib.pyplot` interface; all
-but the first are also method signatures for the
-:meth:`~matplotlib.figure.Figure.colorbar` method::
+Function signatures for the `~matplotlib.pyplot` interface; all but the
+first are also method signatures for the `~matplotlib.figure.Figure.colorbar`
+method::
 
   colorbar(**kwargs)
   colorbar(mappable, **kwargs)
@@ -142,17 +142,16 @@ but the first are also method signatures for the
 Parameters
 ----------
 mappable :
-    The :class:`~matplotlib.image.Image`,
-    :class:`~matplotlib.contour.ContourSet`, etc. to
+    The `~matplotlib.image.Image`, `~matplotlib.contour.ContourSet`, etc. to
     which the colorbar applies; this argument is mandatory for the Figure
-    :meth:`~matplotlib.figure.Figure.colorbar` method but optional for the
-    pyplot :func:`~matplotlib.pyplot.colorbar` function, which sets the
-    default to the current image.
+    `~matplotlib.figure.Figure.colorbar` method but optional for the pyplot
+    `~matplotlib.pyplot.colorbar` function, which sets the default to the
+    current image.
 
-cax : :class:`~matplotlib.axes.Axes` object, optional
+cax : `~matplotlib.axes.Axes` object, optional
     Axes into which the colorbar will be drawn.
 
-ax : :class:`~matplotlib.axes.Axes`, list of Axes, optional
+ax : `~matplotlib.axes.Axes`, list of Axes, optional
     Parent axes from which space for a new colorbar axes will be stolen.
     If a list of axes is given they will all be resized to make room for the
     colorbar axes.
@@ -166,10 +165,10 @@ use_gridspec : bool, optional
 
 Returns
 -------
-:class:`~matplotlib.colorbar.Colorbar` instance
-    See also its base class, :class:`~matplotlib.colorbar.ColorbarBase`.
-    Call the :meth:`~matplotlib.colorbar.ColorbarBase.set_label` method
-    to label the colorbar.
+colorbar : `~matplotlib.colorbar.Colorbar` instance
+    See also its base class, `~matplotlib.colorbar.ColorbarBase`. Call the
+    `~matplotlib.colorbar.ColorbarBase.set_label` method to label the
+    colorbar.
 
 Notes
 -----
@@ -180,7 +179,7 @@ Additional keyword arguments are of two kinds:
   colorbar properties:
 %s
 
-If *mappable* is a :class:`~matplotlib.contours.ContourSet`, its *extend*
+If *mappable* is a `~matplotlib.contours.ContourSet`, its *extend*
 kwarg is included automatically.
 
 The *shrink* kwarg provides a simple way to scale the colorbar with respect

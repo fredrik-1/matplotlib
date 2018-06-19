@@ -1,12 +1,12 @@
 """
-The figure module provides the top-level
-:class:`~matplotlib.artist.Artist`, the :class:`Figure`, which
-contains all the plot elements.  The following classes are defined
+The figure module provides the top-level `~matplotlib.artist.Artist`,
+the `.Figure`, which contains all the plot elements.  The following classes
+are defined
 
-:class:`SubplotParams`
-    control the default spacing of the subplots
+`.SubplotParams`
+    Control the default spacing of the subplots
 
-:class:`Figure`
+`.Figure`
     Top level container for all plot elements.
 
 """
@@ -250,10 +250,10 @@ class Figure(Artist):
     """
     The top level container for all the plot elements.
 
-    The Figure instance supports callbacks through a *callbacks* attribute
+    The `.Figure` instance supports callbacks through a *callbacks* attribute
     which is a `.CallbackRegistry` instance.  The events you can connect to
     are 'dpi_changed', and the callback will be called with ``func(fig)`` where
-    fig is the `Figure` instance.
+    *fig* is the `.Figure` instance.
 
     Attributes
     ----------
@@ -297,10 +297,10 @@ class Figure(Artist):
         dpi : float, default: :rc:`figure.dpi`
             Dots per inch.
 
-        facecolor : default: :rc:`figure.facecolor`
+        facecolor : `~matplotlib.colors`, default: :rc:`figure.facecolor`
             The figure patch facecolor.
 
-        edgecolor : default: :rc:`figure.edgecolor`
+        edgecolor : and matlotlib color, default: :rc:`figure.edgecolor`
             The figure patch edge color.
 
         linewidth : float
@@ -310,15 +310,15 @@ class Figure(Artist):
         frameon : bool, default: :rc:`figure.frameon`
             If ``False``, suppress drawing the figure frame.
 
-        subplotpars : :class:`SubplotParams`
+        subplotpars : `.SubplotParams`
             Subplot parameters. If not given, the default subplot
             parameters :rc:`figure.subplot.*` are used.
 
         tight_layout : bool or dict, default: :rc:`figure.autolayout`
             If ``False`` use *subplotpars*. If ``True`` adjust subplot
             parameters using `.tight_layout` with default padding.
-            When providing a dict containing the keys ``pad``, ``w_pad``,
-            ``h_pad``, and ``rect``, the default `.tight_layout` paddings
+            When providing a dict containing the keys *pad*, *w_pad*,
+            *h_pad*, and *rect*, the default `.tight_layout` paddings
             will be overridden.
 
         constrained_layout : bool
@@ -326,8 +326,8 @@ class Figure(Artist):
             elements.  Like ``tight_layout``, but designed to be more
             flexible.  See
             :doc:`/tutorials/intermediate/constrainedlayout_guide`
-            for examples.  (Note: does not work with :meth:`.subplot` or
-            :meth:`.subplot2grid`.)
+            for examples.  (Note: does not work with `~.pyplot.subplot` or
+            `~.pyplot.subplot2grid`.)
             Defaults to :rc:`figure.constrained_layout.use`.
         """
         Artist.__init__(self)
@@ -409,10 +409,9 @@ class Figure(Artist):
         """
         If using a GUI backend with pyplot, display the figure window.
 
-        If the figure was not created using
-        :func:`~matplotlib.pyplot.figure`, it will lack a
-        :class:`~matplotlib.backend_bases.FigureManagerBase`, and
-        will raise an AttributeError.
+        If the figure was not created using `.pyplot.figure`, it will lack
+        a `~matplotlib.backend_bases.FigureManagerBase`, and will raise an
+        AttributeError.
 
         Parameters
         ----------
@@ -447,10 +446,10 @@ class Figure(Artist):
         return self._axstack.as_list()
 
     axes = property(fget=_get_axes,
-                    doc="List of axes in the Figure. You can access the "
-                        "axes in the Figure through this list. "
+                    doc="List of `~.axes.Axes` in the Figure. You can access "
+                        "the axes in the Figure through this list. "
                         "Do not modify the list itself. Instead, use "
-                        "`~Figure.add_axes`, `~.Figure.subplot` or "
+                        "`~Figure.add_axes`, `~.Figure.add_subplot` or "
                         "`~.Figure.delaxes` to add or remove an axes.")
 
     def _get_dpi(self):
@@ -483,9 +482,9 @@ class Figure(Artist):
 
         Parameters
         ----------
-        tight : bool or dict with keys "pad", "w_pad", "h_pad", "rect" or None
+        tight : bool or dict with keys 'pad', 'w_pad', 'h_pad', 'rect' or None
             If a bool, sets whether to call `.tight_layout` upon drawing.
-            If ``None``, use the ``figure.autolayout`` rcparam instead.
+            If ``None``, use :rc:`figure.autolayout` instead.
             If a dict, pass it as kwargs to `.tight_layout`, overriding the
             default paddings.
         """
@@ -506,12 +505,12 @@ class Figure(Artist):
     def set_constrained_layout(self, constrained):
         """
         Set whether ``constrained_layout`` is used upon drawing. If None,
-        the rcParams['figure.constrained_layout.use'] value will be used.
+        the :rc:`figure.constrained_layout.use` value will be used.
 
-        When providing a dict containing the keys `w_pad`, `h_pad`
+        When providing a dict containing the keys *w_pad*, *h_pad*
         the default ``constrained_layout`` paddings will be
         overridden.  These pads are in inches and default to 3.0/72.0.
-        ``w_pad`` is the width padding and ``h_pad`` is the height padding.
+        *w_pad* is the width padding and *h_pad* is the height padding.
 
         See :doc:`/tutorials/intermediate/constrainedlayout_guide`.
 
@@ -554,11 +553,11 @@ class Figure(Artist):
 
         wspace: scalar
             Width padding between subplots, expressed as a fraction of the
-            subplot width.  The total padding ends up being w_pad + wspace.
+            subplot width.  The total padding ends up being *w_pad* + *wspace*.
 
         hspace: scalar
             Height padding between subplots, expressed as a fraction of the
-            subplot width. The total padding ends up being h_pad + hspace.
+            subplot width. The total padding ends up being *h_pad* + *hspace*.
 
         """
 
@@ -574,8 +573,8 @@ class Figure(Artist):
         """
         Get padding for ``constrained_layout``.
 
-        Returns a list of `w_pad, h_pad` in inches and
-        `wspace` and `hspace` as fractions of the subplot.
+        Returns a list of *w_pad*, *h_pad* in inches and
+        *wspace* and *hspace* as fractions of the subplot.
 
         See :doc:`/tutorials/intermediate/constrainedlayout_guide`.
 
@@ -583,7 +582,7 @@ class Figure(Artist):
         ----------
 
         relative : boolean
-            If `True`, then convert from inches to figure relative.
+            If True, then convert from inches to figure relative.
         """
         w_pad = self._constrained_layout_pads['w_pad']
         h_pad = self._constrained_layout_pads['h_pad']
@@ -602,7 +601,7 @@ class Figure(Artist):
         """
         Date ticklabels often overlap, so it is useful to rotate them
         and right align them.  Also, a common use case is a number of
-        subplots with shared xaxes where the x-axis is date data.  The
+        subplots with shared x-axes where the x-axis is date data.  The
         ticklabels are often long, and it helps to rotate them on the
         bottom subplot and turn them off on other subplots, as well as
         turn off xlabels.
@@ -610,7 +609,7 @@ class Figure(Artist):
         Parameters
         ----------
         bottom : scalar
-            The bottom of the subplots for :meth:`subplots_adjust`.
+            The bottom of the subplots for `.subplots_adjust`.
 
         rotation : angle in degrees
             The rotation of the xtick labels.
@@ -661,7 +660,7 @@ class Figure(Artist):
 
         Returns
         -------
-            bool, {}
+        returns : bool, {}
         """
         if callable(self._contains):
             return self._contains(self, mouseevent)
@@ -670,7 +669,8 @@ class Figure(Artist):
 
     def get_window_extent(self, *args, **kwargs):
         """
-        Return the figure bounding box in display space. Arguments are ignored.
+        Return the figure bounding box, `~matplotlib.transforms.BboxBase`,
+        in display space. Arguments are ignored.
         """
         return self.bbox
 
@@ -707,8 +707,8 @@ default: 'top'
 
         Returns
         -------
-            text
-                The `.Text` instance of the title.
+        title : `.Text`
+            The `.Text` instance of the title.
 
 
         Other Parameters
@@ -716,17 +716,19 @@ default: 'top'
         fontproperties : None or dict, optional
             A dict of font properties. If *fontproperties* is given the
             default values for font size and weight are taken from the
-            `FontProperties` defaults. :rc:`figure.titlesize` and
-            :rc:`figure.titleweight` are ignored in this case.
+            `~matplotlib.font_manager.FontProperties` defaults.
+            :rc:`figure.titlesize` and :rc:`figure.titleweight` are ignored
+            in this case.
 
-        **kwargs
-            Additional kwargs are :class:`matplotlib.text.Text` properties.
+        **kwargs :
+            Additional kwargs are `~matplotlib.text.Text` properties.
 
 
         Examples
         --------
+        ::
 
-        >>> fig.suptitle('This is the figure title', fontsize=12)
+            fig.suptitle('This is the figure title', fontsize=12)
         """
         manual_position = ('x' in kwargs or 'y' in kwargs)
 
@@ -777,7 +779,7 @@ default: 'top'
 
         Parameters
         ----------
-        canvas : FigureCanvas
+        canvas : `.FigureCanvas`
         """
         self.canvas = canvas
 
@@ -804,11 +806,11 @@ default: 'top'
         alpha : None or float
             The alpha blending value.
 
-        norm : :class:`matplotlib.colors.Normalize`
-            A :class:`.Normalize` instance to map the luminance to the
+        norm : `matplotlib.colors.Normalize`
+            A `.Normalize` instance to map the luminance to the
             interval [0, 1].
 
-        cmap : str or :class:`matplotlib.colors.Colormap`
+        cmap : str or `matplotlib.colors.Colormap`
             The colormap to use. Default: :rc:`image.cmap`.
 
         vmin, vmax : scalar
@@ -824,7 +826,7 @@ default: 'top'
 
         Returns
         -------
-        :class:`matplotlib.image.FigureImage`
+        image : `matplotlib.image.FigureImage`
 
         Other Parameters
         ----------------
@@ -833,14 +835,15 @@ default: 'top'
 
         Notes
         -----
-        figimage complements the axes image
-        (:meth:`~matplotlib.axes.Axes.imshow`) which will be resampled
-        to fit the current axes.  If you want a resampled image to
-        fill the entire figure, you can define an
-        :class:`~matplotlib.axes.Axes` with extent [0,0,1,1].
+        figimage complements the axes image (`.Axes.imshow`) which will be
+        resampled to fit the current axes.  If you want a resampled image to
+        fill the entire figure, you can define an `~.axes.Axes` with extent
+        [0,0,1,1].
 
 
-        Examples::
+        Examples
+        --------
+        ::
 
             f = plt.figure()
             nx = int(f.get_figwidth() * f.dpi)
@@ -872,18 +875,26 @@ default: 'top'
 
         Call signatures::
 
-             fig.set_size_inches(w, h)  # OR
+             fig.set_size_inches(w, h)
              fig.set_size_inches((w, h))
 
-        optional kwarg *forward=True* will cause the canvas size to be
-        automatically updated; e.g., you can resize the figure window
-        from the shell
+        Parameters
+        ----------
+        w : float
+            Width in inches
 
-        ACCEPTS: a (w, h) tuple with w, h in inches
+        h : float
+            Height in inches
+
+        forward : bool, optional, default True
+            True will cause the canvas size to be automatically updated;
+            e.g., you can resize the figure window from the shell
+
+            ACCEPTS: a (w, h) tuple with w, h in inches
 
         See Also
         --------
-        matplotlib.Figure.get_size_inches
+        Figure.get_size_inches
         """
 
         # the width and height have been passed in as a tuple to the first
@@ -918,7 +929,7 @@ default: 'top'
 
         See Also
         --------
-        matplotlib.Figure.set_size_inches
+        Figure.set_size_inches
         """
         return np.array(self.bbox_inches.p1)
 
@@ -1417,8 +1428,11 @@ default: 'top'
         """
         Clear the figure.
 
-        Set *keep_observers* to True if, for example,
-        a gui widget is tracking the axes in the figure.
+        Parameters
+        ----------
+        keep_observers : bool
+            Set *keep_observers* to True if, for example,
+            a gui widget is tracking the `~.axes.Axes` in the figure.
         """
         self.suppressComposite = None
         self.callbacks = cbook.CallbackRegistry()
@@ -1446,14 +1460,14 @@ default: 'top'
 
     def clear(self, keep_observers=False):
         """
-        Clear the figure -- synonym for :meth:`clf`.
+        Clear the figure -- synonym for `.clf`.
         """
         self.clf(keep_observers=keep_observers)
 
     @allow_rasterization
     def draw(self, renderer):
         """
-        Render the figure using :class:`matplotlib.backend_bases.RendererBase`
+        Render the figure using `matplotlib.backend_bases.RendererBase`
         instance *renderer*.
         """
 
@@ -1498,7 +1512,7 @@ default: 'top'
 
     def draw_artist(self, a):
         """
-        Draw :class:`matplotlib.artist.Artist` instance *a* only.
+        Draw `matplotlib.artist.Artist` instance *a* only.
         This is available only after the figure is drawn.
         """
         if self._cachedRenderer is None:
@@ -1508,10 +1522,10 @@ default: 'top'
 
     def get_axes(self):
         """
-        Return a list of axes in the Figure. You can access and modify the
-        axes in the Figure through this list.
+        Return a list of `~.axes.Axes` in the `.Figure`. You can access and
+        modify the axes in the Figure through this list.
 
-        Do not modify the list itself. Instead, use `~Figure.add_axes`,
+        Do not modify the list itself. Instead, use `~.Figure.add_axes`,
         `~.Figure.subplot` or `~.Figure.delaxes` to add or remove an axes.
 
         Note: This is equivalent to the property `~.Figure.axes`.
@@ -1564,7 +1578,7 @@ default: 'top'
 
         Returns
         -------
-        :class:`matplotlib.legend.Legend` instance
+        legend : `matplotlib.legend.Legend` instance
 
         Notes
         -----
@@ -1598,17 +1612,30 @@ default: 'top'
         """
         Add text to figure.
 
-        Call signature::
+        Parameters
+        ----------
+        x, y : floats in [0,1]
+            The x, y location of the text in figure coordinates.
 
-          text(x, y, s, fontdict=None, **kwargs)
+        s : str
+            The text string.
 
-        Add text to figure at location *x*, *y* (relative 0-1
-        coords). See :func:`~matplotlib.pyplot.text` for the meaning
-        of the other arguments.
+        fontdict : dict, optional
+            Dictionary with `.Text` properties. A property in **kwargs
+            override the same property in fontdict.
 
-        kwargs control the :class:`~matplotlib.text.Text` properties:
+        **kwargs
+            Control the `~matplotlib.text.Text` properties:
+            %(Text)s
 
-        %(Text)s
+        Returns
+        -------
+        text : `.Text`
+
+        See Also
+        --------
+        Axes.text
+        pyplot.text
         """
 
         override = _process_text_args({}, *args, **kwargs)
@@ -1630,7 +1657,7 @@ default: 'top'
     @docstring.dedent_interpd
     def gca(self, **kwargs):
         """
-        Get the current axes, creating one if necessary.
+        Get the current `~.axes.Axes`, creating one if necessary.
 
         The following kwargs are supported for ensuring the returned axes
         adheres to the given projection etc., and for axes creation if
@@ -1672,17 +1699,26 @@ default: 'top'
         # no axes found, so create one which spans the figure
         return self.add_subplot(1, 1, 1, **kwargs)
 
-    def sca(self, a):
-        """Set the current axes to be a and return a."""
-        self._axstack.bubble(a)
+    def sca(self, ax):
+        """
+        Set the current axes.
+
+        Parameters
+        ----------
+        ax : `~.axes.Axes`
+            Set the current `.axes.Axes` to be *ax*
+
+        Return
+        ------
+        ax : `~.axes.Axes`
+        """
+        self._axstack.bubble(ax)
         for func in self._axobservers:
             func(self)
-        return a
+        return ax
 
     def _gci(self):
-        """
-        Helper for :func:`~matplotlib.pyplot.gci`. Do not use elsewhere.
-        """
+        """ Helper for `.pyplot.gci`. Do not use elsewhere."""
         # Look first for an image in the current Axes:
         cax = self._axstack.current_key_axes()[1]
         if cax is None:
@@ -1774,7 +1810,9 @@ default: 'top'
         self.stale = True
 
     def add_axobserver(self, func):
-        """Whenever the axes state change, ``func(self)`` will be called."""
+        """
+        Whenever the axes state change, ``func(self)`` will be called.
+        """
         self._axobservers.append(func)
 
     def savefig(self, fname, *, frameon=None, transparent=None, **kwargs):
@@ -1785,7 +1823,7 @@ default: 'top'
 
           savefig(fname, dpi=None, facecolor='w', edgecolor='w',
                   orientation='portrait', papertype=None, format=None,
-                  transparent=False, bbox_inches=None, pad_inches=0.1,
+                  transparent=None, bbox_inches=None, pad_inches=0.1,
                   frameon=None)
 
         The output formats available depend on the backend being used.
@@ -1796,7 +1834,7 @@ default: 'top'
         fname : str or file-like object
             A string containing a path to a filename, or a Python
             file-like object, or possibly some backend-dependent object
-            such as :class:`~matplotlib.backends.backend_pdf.PdfPages`.
+            such as `.backends.backend_pdf.PdfPages`.
 
             If *format* is *None* and *fname* is a string, the output
             format is deduced from the extension of the filename. If
@@ -1808,7 +1846,7 @@ default: 'top'
         Other Parameters
         ----------------
 
-        dpi : [ *None* | scalar > 0 | 'figure' ]
+        dpi : {*None*, scalar > 0, 'figure'}
             The resolution in dots per inch.  If *None*, defaults to
             :rc:`savefig.dpi`.  If 'figure', uses the figure's dpi value.
 
@@ -1897,7 +1935,7 @@ default: 'top'
     @docstring.dedent_interpd
     def colorbar(self, mappable, cax=None, ax=None, use_gridspec=True, **kw):
         """
-        Create a colorbar for a ScalarMappable instance, *mappable*.
+        Create a colorbar for a `.cm.ScalarMappable` instance, *mappable*.
 
         Documentation for the pyplot thin wrapper:
         %(colorbar_doc)s
@@ -1966,15 +2004,20 @@ default: 'top'
         n : int, optional, default: 1
             Number of mouse clicks to accumulate. If negative, accumulate
             clicks until the input is terminated manually.
+
         timeout : scalar, optional, default: 30
             Number of seconds to wait before timing out. If zero or negative
             will never timeout.
+
         show_clicks : bool, optional, default: False
             If True, show a red cross at the location of each click.
+
         mouse_add : int, one of (1, 2, 3), optional, default: 1 (left click)
             Mouse button used to add points.
+
         mouse_pop : int, one of (1, 2, 3), optional, default: 3 (right click)
             Mouse button used to remove the most recently added point.
+
         mouse_stop : int, one of (1, 2, 3), optional, default: 2 (middle click)
             Mouse button used to stop input.
 
@@ -2025,9 +2068,10 @@ default: 'top'
 
     def get_tightbbox(self, renderer):
         """
-        Return a (tight) bounding box of the figure in inches.
+        Return a (tight) bounding box, `~matplotlib.transforms.Bbox`,
+        of the figure in inches.
 
-        Currently, this takes only axes title, axis labels, and axis
+        Currently, this takes only `~.axes.Axes` title, axis labels, and axis
         ticklabels into account. Needs improvement.
         """
 
@@ -2058,7 +2102,9 @@ default: 'top'
         """
         Use ``layoutbox`` to determine pos positions within axes.
 
-        See also `.set_constrained_layout_pads`.
+        See Also
+        --------
+        .set_constrained_layout_pads
         """
 
         from matplotlib._constrained_layout import do_constrained_layout
@@ -2091,9 +2137,11 @@ default: 'top'
         pad : float
             Padding between the figure edge and the edges of subplots,
             as a fraction of the font size.
+
         h_pad, w_pad : float, optional
             Padding (height/width) between edges of adjacent subplots,
             as a fraction of the font size.  Defaults to *pad*.
+
         rect : tuple (left, bottom, right, top), optional
             A rectangle (left, bottom, right, top) in the normalized
             figure coordinate that the whole subplots area (including
@@ -2138,13 +2186,12 @@ default: 'top'
 
         See Also
         --------
-        matplotlib.figure.Figure.align_ylabels
-
-        matplotlib.figure.Figure.align_labels
+        Figure.align_ylabels
+        Figure.align_labels
 
         Notes
         -----
-        This assumes that ``axs`` are from the same `.GridSpec`, so that
+        This assumes that *axs* are from the same `.GridSpec`, so that
         their `.SubplotSpec` positions correspond to figure positions.
 
         Examples
@@ -2207,13 +2254,12 @@ default: 'top'
 
         See Also
         --------
-        matplotlib.figure.Figure.align_xlabels
-
-        matplotlib.figure.Figure.align_labels
+        Figure.align_xlabels
+        Figure.align_labels
 
         Notes
         -----
-        This assumes that ``axs`` are from the same `.GridSpec`, so that
+        This assumes that *axs* are from the same `.GridSpec`, so that
         their `.SubplotSpec` positions correspond to figure positions.
 
         Examples
@@ -2264,16 +2310,14 @@ default: 'top'
 
         Parameters
         ----------
-        axs : list of `~matplotlib.axes.Axes`
-            Optional list (or ndarray) of `~matplotlib.axes.Axes`
-            to align the labels.
+        axs : list of `~.axes.Axes`
+            Optional list (or ndarray) of `~.axes.Axes` to align the labels.
             Default is to align all axes on the figure.
 
         See Also
         --------
-        matplotlib.figure.Figure.align_xlabels
-
-        matplotlib.figure.Figure.align_ylabels
+        Figure.align_xlabels
+        Figure.align_ylabels
         """
         self.align_xlabels(axs=axs)
         self.align_ylabels(axs=axs)
