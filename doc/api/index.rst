@@ -12,10 +12,11 @@
 .. toctree::
    :maxdepth: 1
 
-   pyplot_summary.rst
+
    api_changes.rst
    matplotlib_configuration_api.rst
    afm_api.rst
+   pyplot_api.rst
    animation_api.rst
    artist_api.rst
    axes_api.rst
@@ -60,13 +61,6 @@
    units_api.rst
    widgets_api.rst
 
-.. currentmodule:: matplotlib
-
-.. autosummary::
-   :toctree: _as_gen
-   :template: autofunctions.rst
-
-   pyplot
 
 
 Toolkits
@@ -75,7 +69,7 @@ Toolkits
 .. toctree::
    :maxdepth: 1
 
-   
+
    toolkits/mplot3d.rst
    toolkits/axes_grid1.rst
    toolkits/axisartist.rst
