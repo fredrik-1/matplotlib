@@ -1,6 +1,4 @@
-
-{{ fullname | escape | underline }}
-
+{{ fullname | escape | underline}}
 
 .. automodule:: {{ fullname }}
    :no-members:
