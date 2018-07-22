@@ -249,6 +249,7 @@ def show(*args, **kw):
     global _show
     return _show(*args, **kw)
 
+show._needmain=True
 
 def isinteractive():
     """Return the status of interactive mode."""
@@ -259,13 +260,20 @@ def ioff():
     """Turn the interactive mode off."""
     matplotlib.interactive(False)
     uninstall_repl_displayhook()
+    show._needmain = True
+
+def ioff_non_block():
+    """Turn the interactive mode off. Dont block windows."""
+    matplotlib.interactive(False)
+    uninstall_repl_displayhook()
+    show._needmain = False
 
 
 def ion():
     """Turn the interactive mode on."""
     matplotlib.interactive(True)
     install_repl_displayhook()
-
+    show._needmain = False
 
 def pause(interval):
     """
